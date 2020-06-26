@@ -8,6 +8,6 @@ import {combineReducers} from 'redux'
 // for example, just like a company has many departments, it needs a director that directs all the activities of all those departments
 export default combineReducers({joke: jokeReducer}) //key JO K
 //here I'm exporting the result of this function combinedReducer({joke: jokeReducer}) => rootReducer in index.js
-
+// the combination of all the reducers make the state
 
 
