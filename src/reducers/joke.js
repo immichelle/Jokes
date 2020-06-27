@@ -10,7 +10,7 @@
 //how does a component access state in reducer?
 
 //create dummy data for jokes
-const intialState = [
+const initialState = [
     {
         id: 1,
         joke: 'ha ha ha '
@@ -23,10 +23,18 @@ const intialState = [
 //action impacts old state in reducer and create a new state in reducer
 
 // export with no name, then it can be imported with any name, and the whole file will be imported
-export default (state = intialState, action) => {
+// in order to change state in reducer, we use action
+export default (state = initialState, action) => {
     switch (action.type) {
         case 'GET_JOKES':
             return state //new state?
+        case 'ADD_JOKE':
+            //handle logic here
+            console.log(action)
+            //because state in Redux is immutable, we do not change it => we make a copy of old state and add action.payload to old state
+            const newState = [...state, action.payload]
+            return newState
+
         default:
             return state
     }
