@@ -10,15 +10,10 @@
 //how does a component access state in reducer?
 
 //create dummy data for jokes
+// **We can use immerjs to handle immmutable
+//redux is immutable so that easy compare change on data
 const initialState = [
-    {
-        id: 1,
-        joke: 'ha ha ha '
-    },
-    {
-        id: 2,
-        joke: 'omg so funny'
-    }
+
 ];//old reducer
 //action impacts old state in reducer and create a new state in reducer
 
@@ -27,7 +22,8 @@ const initialState = [
 export default (state = initialState, action) => {
     switch (action.type) {
         case 'GET_JOKES':
-            return state //new state?
+            const { payload } = action; //response from API call
+            return [...state, payload] //new state?
         case 'ADD_JOKE':
             //handle logic here
             console.log(action)

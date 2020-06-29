@@ -18,17 +18,23 @@ import { connect } from 'react-redux'
 // to get action from action folder, we need to import it
 
 // : colon, ; semicolon , comma
-import { addJoke } from '../actions/joke'
+import { getJokes } from '../actions/joke'
 
 class JokeList extends Component {
+    //to call action when component is initialized, we use "componentDidMount"
+    componentDidMount() {
+        this.props.getJokes()
+    }
+
+    // render => componentDidMount to get Data => after data is successfully fetched, render will be called again
 
     render() {
         console.log('this.props', this.props)
-        const {jokeList , addJoke} = this.props;
+        const { jokeList, getJokes } = this.props;
         return ( //why paranthesis? to wrap everything. If it's just one line, you don't need the paranthesis here
             <div>
                 {jokeList.map(item => <p key={item.id}>{item.joke}</p>)}
-                <button onClick={() => { addJoke() }}>Add joke</button>
+                <button onClick={() => { }}>Add joke</button>
 
             </div>
         )
@@ -41,6 +47,6 @@ const mapStateToProps = state => {
     return { jokeList: state.joke }; //combined reducer = whole state
 }
 
-const mapDispatch = { addJoke }
+const mapDispatchToProps = { getJokes }
 //this is an example of higher order component HOC
-export default connect(mapStateToProps, mapDispatch)(JokeList)
+export default connect(mapStateToProps, mapDispatchToProps)(JokeList)
