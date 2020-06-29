@@ -30,18 +30,22 @@ class JokeList extends Component {
 
     render() {
         console.log('this.props', this.props)
-        const { jokeList, getJokes } = this.props;
+        const { jokeList, getJokes } = this.props; //jokeList is from mapStateToProps
         return ( //why paranthesis? to wrap everything. If it's just one line, you don't need the paranthesis here
             <div>
                 {jokeList.map(item => <p key={item.id}>{item.joke}</p>)}
-                <button onClick={() => { }}>Add joke</button>
-
+                {/* get 10 jokes: write a loop or map? */}
+                {/* homework: create action ADD_ONE_JOKE  */}
+                <button onClick={() => { }}>Add 1 more joke</button>
             </div>
         )
     }
 }
 //this function gets called first, before JokeList (line 34)
 const mapStateToProps = state => {
+    //state here is the combined State (same as rootReducer=combined reducers) (many reducers are combined to form rootReducer)
+    //each reducer holds a piece of state
+    //in order to get the piece/reducer for jokes, we point it to state.joke
     console.log('state', state.joke) //we get an array of jokes here
     //because mapStateToProps must return an object while state.joke is an array, so we create a new object with jokeList as the key and state.joke as the value
     return { jokeList: state.joke }; //combined reducer = whole state

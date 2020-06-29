@@ -23,7 +23,9 @@ export default (state = initialState, action) => {
     switch (action.type) {
         case 'GET_JOKES':
             const { payload } = action; //response from API call
-            return [...state, payload] //new state?
+            // return [...state, payload] when we fetch only 1 joke, payload was an object => no need to spread
+            //payload now is not an object, but an array, so we need to spread it(payload)
+            return [...state, ...payload]
         case 'ADD_JOKE':
             //handle logic here
             console.log(action)

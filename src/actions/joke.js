@@ -12,19 +12,26 @@ export const getJokes = () => async dispatch => {
     //action returns a type and data
 
     //axios will return a promise. In order to handle promise, we need to use "then" or async await
-    const response = await axios.get('https://icanhazdadjoke.com/', {
-        headers: {
-            Accept: 'application/json'
-        }
-    })
-    console.log(response)
-    const { id, joke } = response.data
+    let count = 0;
+    //create a new empty array to prepare for getting 10 jokes from API
+    let arrJokes = []
+    //for loop can be used here, but while's syntax is shorter
+    while (count < 10) {
+        const response = await axios.get('https://icanhazdadjoke.com/', {
+            headers: {
+                Accept: 'application/json'
+            }
+        })
+        const { id, joke } = response.data
+        arrJokes.push({ id, joke })
+        count++;
+    }
+
+    console.log(arrJokes)
+
     dispatch({
         type: 'GET_JOKES',
-        payload: {
-            id,
-            joke
-        }
+        payload: arrJokes
     })
 
 
