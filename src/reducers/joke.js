@@ -26,9 +26,9 @@ export default (state = initialState, action) => {
             // return [...state, payload] when we fetch only 1 joke, payload was an object => no need to spread
             //payload now is not an object, but an array, so we need to spread it(payload)
             return [...state, ...payload]
-        case 'ADD_JOKE':
+        case 'ADD_ONE_JOKE':
             //handle logic here
-            console.log(action)
+            console.log('action', action)
             //because state in Redux is immutable, we do not change it => we make a copy of old state and add action.payload to old state
             const newState = [...state, action.payload]
             return newState

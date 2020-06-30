@@ -18,7 +18,7 @@ import { connect } from 'react-redux'
 // to get action from action folder, we need to import it
 
 // : colon, ; semicolon , comma
-import { getJokes } from '../actions/joke'
+import { getJokes, addOneJoke } from '../actions/joke'
 
 class JokeList extends Component {
     //to call action when component is initialized, we use "componentDidMount"
@@ -30,13 +30,16 @@ class JokeList extends Component {
 
     render() {
         console.log('this.props', this.props)
-        const { jokeList, getJokes } = this.props; //jokeList is from mapStateToProps
+        const { jokeList, getJokes, addOneJoke } = this.props; //jokeList is from mapStateToProps
         return ( //why paranthesis? to wrap everything. If it's just one line, you don't need the paranthesis here
             <div>
                 {jokeList.map(item => <p key={item.id}>{item.joke}</p>)}
                 {/* get 10 jokes: write a loop or map? */}
                 {/* homework: create action ADD_ONE_JOKE  */}
-                <button onClick={() => { }}>Add 1 more joke</button>
+                {/* <button onClick={addOneJoke}>Add 1 more joke</button> */}
+                <button onClick={() => addOneJoke()}>Add 1 more joke</button>
+                {/* () when onClick trigger , it will call addOneJoke()  */}
+                {/* because addOnJoke is a function , You can rewrite addOneJoke()  */}
             </div>
         )
     }
@@ -51,6 +54,6 @@ const mapStateToProps = state => {
     return { jokeList: state.joke }; //combined reducer = whole state
 }
 
-const mapDispatchToProps = { getJokes }
+const mapDispatchToProps = { getJokes, addOneJoke }
 //this is an example of higher order component HOC
 export default connect(mapStateToProps, mapDispatchToProps)(JokeList)
