@@ -20,9 +20,10 @@ const initialState = [
 // export with no name, then it can be imported with any name, and the whole file will be imported
 // in order to change state in reducer, we use action
 export default (state = initialState, action) => {
+    const { payload } = action;
     switch (action.type) {
         case 'GET_JOKES':
-            const { payload } = action; //response from API call
+             //response from API call
             // return [...state, payload] when we fetch only 1 joke, payload was an object => no need to spread
             //payload now is not an object, but an array, so we need to spread it(payload)
             return [...state, ...payload]
@@ -32,7 +33,8 @@ export default (state = initialState, action) => {
             //because state in Redux is immutable, we do not change it => we make a copy of old state and add action.payload to old state
             const newState = [...state, action.payload]
             return newState
-
+        case 'ADD_JOKES':
+            return [...state, ...payload]
         default:
             return state
     }
