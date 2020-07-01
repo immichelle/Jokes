@@ -41,9 +41,10 @@ class JokeList extends Component {
                 {/* () when onClick trigger , it will call addOneJoke()  */}
                 {/* because addOnJoke is a function , You can rewrite addOneJoke()  */}
                 {/* TODO: need a select to choose number of jokes => create a dropdown menu with options "Add 2 jokes" "Add 5 jokes" */}
-                <select onChange={() => { addJokes(2) }}>
-                    <option >Add 2 jokes</option>
-                    <option>Add 5 jokes</option>
+                <select onChange={(e) => { addJokes(e.target.value) }}>
+                    {/* we need a state to hold the number (2 or 5) in option */}
+                    <option value="2">Add 2 jokes</option>
+                    <option value="5">Add 5 jokes</option>
                 </select>
             </div>
         )
