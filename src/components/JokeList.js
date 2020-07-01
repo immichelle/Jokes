@@ -8,6 +8,8 @@ import React, { Component } from 'react'
 // 1 . export default JokeList => import JokeList
 // 2. export const sum = (a,b) => {...} => import {sum}
 import { connect } from 'react-redux'
+import ClipLoader from "react-spinners/ClipLoader";
+import PacmanLoader from "react-spinners/PacmanLoader";
 
 //this component needs to access state in reducer in order to be rendered
 //in order to do this, we pass 2 params to connect():
@@ -29,11 +31,17 @@ class JokeList extends Component {
     // render => componentDidMount to get Data => after data is successfully fetched, render will be called again
 
     render() {
-        console.log('this.props', this.props)
-        const { jokeList, getJokes, addOneJoke, addJokes } = this.props; //jokeList is from mapStateToProps
+        // jokeList and loading are passed down from mapStateToProps
+        const { jokeList, getJokes, addOneJoke, addJokes, loading } = this.props; //
         return ( //why paranthesis? to wrap everything. If it's just one line, you don't need the paranthesis here
             <div>
-                {jokeList.map((item, index) => <p key={item.id}>{index+1}. {item.joke}</p>)}
+                <PacmanLoader
+                    size={150}
+                    color={"#123abc"}
+                    //when the joke list is waiting for response from API, loading is true. After that, loading is false
+                    loading={loading}
+                />
+                {jokeList.map((item, index) => <p key={item.id}>{index + 1}. {item.joke}</p>)}
                 {/* get 10 jokes: write a loop or map? */}
                 {/* homework: create action ADD_ONE_JOKE  */}
                 {/* <button onClick={addOneJoke}>Add 1 more joke</button> */}
@@ -55,9 +63,12 @@ const mapStateToProps = state => {
     //state here is the combined State (same as rootReducer=combined reducers) (many reducers are combined to form rootReducer)
     //each reducer holds a piece of state
     //in order to get the piece/reducer for jokes, we point it to state.joke
-    console.log('state', state.joke) //we get an array of jokes here
+    // console.log('state', state.joke) //we get an array of jokes here
     //because mapStateToProps must return an object while state.joke is an array, so we create a new object with jokeList as the key and state.joke as the value
-    return { jokeList: state.joke }; //combined reducer = whole state
+    return {
+        jokeList: state.joke,
+        loading: state.loading.isLoading
+    }; //combined reducer = whole state
 }
 
 const mapDispatchToProps = { getJokes, addOneJoke, addJokes }

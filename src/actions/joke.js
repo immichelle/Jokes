@@ -10,12 +10,14 @@ import axios from 'axios';
 // HOC # HOF => HOF: take a function as parameter
 export const getJokes = () => async dispatch => {
   //action returns a type and data
-
-  //axios will return a promise. In order to handle promise, we need to use "then" or async await
-  let count = 0;
-  //create a new empty array to prepare for getting 10 jokes from API
+  //will call action loading here BEFORE CALLING API
+  dispatch({ type: 'SHOW_LOADING' })
+  //axios will return a promise. In  order to handle promise, we need to use "then" or async await
+  let count = 0; 
+  //create a new eempty array to prepare for getting 10 jokes from API
   let arrJokes = []
   //for loop can be used here, but while's syntax is shorter
+
   while (count < 10) {
     const response = await axios.get('https://icanhazdadjoke.com/', {
       headers: {
@@ -27,11 +29,13 @@ export const getJokes = () => async dispatch => {
     count++;
   }
 
-  console.log(arrJokes)
 
   dispatch({
     type: 'GET_JOKES',
     payload: arrJokes
+  })
+  dispatch({
+    type: 'HIDE_LOADING'
   })
 
 
@@ -44,28 +48,28 @@ export const addOneJoke = () => async dispatch => {
     }
   }
   )
-  const {id, joke} = response.data;
-  dispatch( {
+  const { id, joke } = response.data;
+  dispatch({
     type: 'ADD_ONE_JOKE',
     //return one object, not array of jokes
-    payload: {id, joke}
+    payload: { id, joke }
   })
 }
 
 export const addJokes = (number) => async dispatch => {
   let jokeArr = [];
 
-  for(let i = 0; i < number; i++ ) {
+  for (let i = 0; i < number; i++) {
     const response = await axios.get('https://icanhazdadjoke.com/', {
       headers: {
         Accept: 'application/json'
       }
     })
-    const {id, joke} = response.data;
-    jokeArr.push({id, joke})
+    const { id, joke } = response.data;
+    jokeArr.push({ id, joke })
   }
 
-  dispatch( {
+  dispatch({
     type: 'ADD_JOKES',
     //return the aray of new jokes
     payload: jokeArr
