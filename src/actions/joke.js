@@ -24,8 +24,11 @@ export const getJokes = () => async dispatch => {
         Accept: 'application/json'
       }
     })
-    const { id, joke } = response.data
-    arrJokes.push({ id, joke })
+    const { id, joke } = response.data;
+    //after getting id from the first API call, use the ID to make the second API call to get an image
+    const imageResponse = await axios.get(`https://picsum.photos/v2/list`)
+    console.log(imageResponse)
+    arrJokes.push({ id, joke, image: imageResponse.data[0].url })
     count++;
   }
 
@@ -55,10 +58,10 @@ export const addOneJoke = () => async dispatch => {
 }
 
 export const addJokes = (number) => async dispatch => {
-//dispatch an action to change loading state
-dispatch({
-  type: 'SHOW_LOADING'
-})
+  //dispatch an action to change loading state
+  dispatch({
+    type: 'SHOW_LOADING'
+  })
 
   let jokeArr = [];
   for (let i = 0; i < number; i++) {

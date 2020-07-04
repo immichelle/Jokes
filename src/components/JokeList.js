@@ -33,7 +33,7 @@ class JokeList extends Component {
     render() {
         // jokeList and loading are passed down from mapStateToProps
         const { jokeList, getJokes, addOneJoke, addJokes, loading } = this.props; //
-        return ( //why paranthesis? to wrap everything. If it's just one line, you don't need the paranthesis here
+        return ( //why parenthesis? to wrap everything. If it's just one line, you don't need the parenthesis here
             <div>
                 <PacmanLoader
                     size={150}
@@ -41,7 +41,13 @@ class JokeList extends Component {
                     //when the joke list is waiting for response from API, loading is true. After that, loading is false
                     loading={loading}
                 />
-                {jokeList.map((item, index) => <p key={item.id}>{index + 1}. {item.joke}</p>)}
+                {jokeList.map((item, index) =>
+                    <div key={item.id}>
+                        <p>{index + 1}. {item.joke}</p>
+                        {/* in a real project, the URL might be dynamic (not fixed, it can change) => so you don't wanna hardcode it  */}
+                        {/* <img src={item.image} ></img> */}
+                    </div>
+                )}
                 {/* get 10 jokes: write a loop or map? */}
                 {/* homework: create action ADD_ONE_JOKE  */}
                 {/* <button onClick={addOneJoke}>Add 1 more joke</button> */}
@@ -49,11 +55,13 @@ class JokeList extends Component {
                 {/* () when onClick trigger , it will call addOneJoke()  */}
                 {/* because addOnJoke is a function , You can rewrite addOneJoke()  */}
                 {/* TODO: need a select to choose number of jokes => create a dropdown menu with options "Add 2 jokes" "Add 5 jokes" */}
-                <select onChange={(e) => { addJokes(e.target.value) }}>
+                <select onClick={(e) => { addJokes(e.target.value) }}>
                     {/* we need a state to hold the number (2 or 5) in option */}
                     <option value="2">Add 2 jokes</option>
                     <option value="5">Add 5 jokes</option>
                 </select>
+                {/* TODO: Get a joke and its image */}
+
             </div>
         )
     }
