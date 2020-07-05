@@ -14,7 +14,7 @@ export const getJokes = () => async dispatch => {
   dispatch({ type: 'SHOW_LOADING' })
   //axios will return a promise. In  order to handle promise, we need to use "then" or async await
   let count = 0;
-  //create a new eempty array to prepare for getting 10 jokes from API
+  //create a new empty array to prepare for getting 10 jokes from API
   let arrJokes = []
   //for loop can be used here, but while's syntax is shorter
 
@@ -28,7 +28,12 @@ export const getJokes = () => async dispatch => {
     //after getting id from the first API call, use the ID to make the second API call to get an image
     const imageResponse = await axios.get(`https://picsum.photos/v2/list`)
     console.log(imageResponse)
-    arrJokes.push({ id, joke, image: imageResponse.data[0].url })
+    arrJokes.push({
+      id,
+      joke,
+      score: 0
+      // image: imageResponse.data[0].url
+    })
     count++;
   }
 
@@ -49,11 +54,12 @@ export const addOneJoke = () => async dispatch => {
     }
   }
   )
-  const { id, joke } = response.data;
+  const { id, joke} = response.data;
   dispatch({
     type: 'ADD_ONE_JOKE',
     //return one object, not array of jokes
-    payload: { id, joke }
+    //initialize the value of score 
+    payload: { id, joke, score: 0 }
   })
 }
 
@@ -70,8 +76,8 @@ export const addJokes = (number) => async dispatch => {
         Accept: 'application/json'
       }
     })
-    const { id, joke } = response.data;
-    jokeArr.push({ id, joke })
+    const { id, joke} = response.data;
+    jokeArr.push({ id, joke, score: 0 })
   }
 
   dispatch({
@@ -85,3 +91,13 @@ export const addJokes = (number) => async dispatch => {
   })
 }
 
+export const increaseVote = (id) => async dispatch => {
+  dispatch({
+    type: 'INCREASE_VOTE',
+    payload: id // just passing id to reducer because reducer doesn't know about the id yet. Action doesn't have state
+    //find() item with that id and then item.score++
+    //how do we get score? Wil said that sometimes we can get from API, sometimes we don't need to. We just need a state on the front end to manipulate score.
+    //sometimes API don't return value of state, for example: score, but our app needs "score" on client(front end/browser) => we must create on client. FE and BE are separate
+    //writing an API would take much/a lot of time because time is uncountable
+  })
+}

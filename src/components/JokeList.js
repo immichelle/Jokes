@@ -20,7 +20,7 @@ import PacmanLoader from "react-spinners/PacmanLoader";
 // to get action from action folder, we need to import it
 
 // : colon, ; semicolon , comma
-import { getJokes, addOneJoke, addJokes } from '../actions/joke'
+import { getJokes, addOneJoke, addJokes, increaseVote } from '../actions/joke'
 
 class JokeList extends Component {
     //to call action when component is initialized, we use "componentDidMount"
@@ -32,7 +32,7 @@ class JokeList extends Component {
 
     render() {
         // jokeList and loading are passed down from mapStateToProps
-        const { jokeList, getJokes, addOneJoke, addJokes, loading } = this.props; //
+        const { jokeList, getJokes, addOneJoke, addJokes, loading, increaseVote } = this.props; //
         return ( //why parenthesis? to wrap everything. If it's just one line, you don't need the parenthesis here
             <div>
                 <PacmanLoader
@@ -41,9 +41,14 @@ class JokeList extends Component {
                     //when the joke list is waiting for response from API, loading is true. After that, loading is false
                     loading={loading}
                 />
-                {jokeList.map((item, index) =>
-                    <div key={item.id}>
-                        <p>{index + 1}. {item.joke}</p>
+                {jokeList.sort((a, b) => b.score - a.score).map((item, index) =>
+                    <div style={{ margin: 20 }} key={item.id}>
+                        {/* TODO: create 2 buttons: 'up' and 'down' for each joke */}
+                        <p>{index + 1}. {item.joke}
+                            <button onClick={() => increaseVote(item.id)}>UP</button>
+                            <button onClick={() => { }}>DOWN</button>
+                            <span>SCORE: {item.score}</span>
+                        </p>
                         {/* in a real project, the URL might be dynamic (not fixed, it can change) => so you don't wanna hardcode it  */}
                         {/* <img src={item.image} ></img> */}
                     </div>
@@ -79,6 +84,6 @@ const mapStateToProps = state => {
     }; //combined reducer = whole state
 }
 
-const mapDispatchToProps = { getJokes, addOneJoke, addJokes }
+const mapDispatchToProps = { getJokes, addOneJoke, addJokes, increaseVote }
 //this is an example of higher order component HOC
 export default connect(mapStateToProps, mapDispatchToProps)(JokeList)

@@ -23,7 +23,7 @@ export default (state = initialState, action) => {
     const { payload } = action;
     switch (action.type) {
         case 'GET_JOKES':
-             //response from API call
+            //response from API call
             // return [...state, payload] when we fetch only 1 joke, payload was an object => no need to spread
             //payload now is not an object, but an array, so we need to spread it(payload)
             return [...state, ...payload]
@@ -31,10 +31,23 @@ export default (state = initialState, action) => {
             //handle logic here
             // console.log('action', action)
             //because state in Redux is immutable, we do not change it => we make a copy of old state and add action.payload to old state
-            const newState = [...state, action.payload]
+            let newState = [...state, action.payload]
             return newState
         case 'ADD_JOKES':
             return [...state, ...payload]
+        case 'INCREASE_VOTE':
+            //identify the joke I want to update
+            let oldState = [...state] //just getting a copy of state
+            // const updatedItem = oldState.find(item => item.id === payload)
+            //map oldState to new State
+            let secondState = oldState.map(item => {
+                if (item.id === payload) {
+                    item.score++
+                }
+                return item
+            })
+            console.log(secondState)
+            return secondState
         default:
             return state
     }
