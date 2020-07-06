@@ -23,16 +23,29 @@ import PacmanLoader from "react-spinners/PacmanLoader";
 import { getJokes, addOneJoke, addJokes, increaseVote } from '../actions/joke'
 
 class JokeList extends Component {
+    state = {
+        orderIncrease: false
+    }
     //to call action when component is initialized, we use "componentDidMount"
     componentDidMount() {
         this.props.getJokes()
+    }
+
+    handleReverseJokes = () => {
+        //toggle order Increase
+        this.setState({orderIncrease: !this.state.orderIncrease})
     }
 
     // render => componentDidMount to get Data => after data is successfully fetched, render will be called again
 
     render() {
         // jokeList and loading are passed down from mapStateToProps
-        const { jokeList, getJokes, addOneJoke, addJokes, loading, increaseVote } = this.props; //
+        let { jokeList, getJokes, addOneJoke, addJokes, loading, increaseVote } = this.props; //
+        jokeList = jokeList.sort((a, b) => b.score - a.score)
+        console.log(this.state)
+        if(this.state.orderIncrease === true) {
+            jokeList = jokeList.sort((a, b) => a.score - b.score)
+        }
         return ( //why parenthesis? to wrap everything. If it's just one line, you don't need the parenthesis here
             <div>
                 <PacmanLoader
@@ -41,7 +54,7 @@ class JokeList extends Component {
                     //when the joke list is waiting for response from API, loading is true. After that, loading is false
                     loading={loading}
                 />
-                {jokeList.sort((a, b) => b.score - a.score).map((item, index) =>
+                {jokeList.map((item, index) =>
                     <div style={{ margin: 20 }} key={item.id}>
                         {/* TODO: create 2 buttons: 'up' and 'down' for each joke */}
                         <p>{index + 1}. {item.joke}
@@ -67,7 +80,7 @@ class JokeList extends Component {
                     <option value="5">Add 5 jokes</option>
                 </select>
                 {/* TODO: Get a joke and its image */}
-                <button onClick={() => {}}>Reverse the order of jokes</button>
+                <button onClick={() => {this.handleReverseJokes()}}>Reverse the order of jokes</button>
             </div>
         )
     }
