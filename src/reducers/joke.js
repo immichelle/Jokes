@@ -41,8 +41,8 @@ export default (state = initialState, action) => {
             // const updatedItem = oldState.find(item => item.id === payload)
             //map oldState to new State
             let secondState = oldState.map(item => {
-                if (item.id === payload) {
-                    item.score++
+                if (item.id === payload.id) {
+                    item.score = item.score + payload.randomNumber
                 }
                 return item
             })

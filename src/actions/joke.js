@@ -34,7 +34,7 @@ export const getJokes = () => async dispatch => {
     arrJokes.push({
       id,
       joke,
-      score: getRandomNumber()
+      score: 0
       // image: imageResponse.data[0].url
     })
     count++;
@@ -62,7 +62,7 @@ export const addOneJoke = () => async dispatch => {
     type: 'ADD_ONE_JOKE',
     //return one object, not array of jokes
     //initialize the value of score
-    payload: { id, joke, score: getRandomNumber() }
+    payload: { id, joke, score: 0 }
   })
 }
 
@@ -80,7 +80,7 @@ export const addJokes = (number) => async dispatch => {
       }
     })
     const { id, joke } = response.data;
-    jokeArr.push({ id, joke, score: getRandomNumber() })
+    jokeArr.push({ id, joke, score: 0 })
   }
 
   dispatch({
@@ -97,7 +97,10 @@ export const addJokes = (number) => async dispatch => {
 export const increaseVote = (id) => async dispatch => {
   dispatch({
     type: 'INCREASE_VOTE',
-    payload: id // just passing id to reducer because reducer doesn't know about the id yet. Action doesn't have state
+    payload: {
+      id,
+      randomNumber: getRandomNumber()
+    }// just passing id to reducer because reducer doesn't know about the id yet. Action doesn't have state
     //find() item with that id and then item.score++
     //how do we get score? Wil said that sometimes we can get from API, sometimes we don't need to. We just need a state on the front end to manipulate score.
     //sometimes API don't return value of state, for example: score, but our app needs "score" on client(front end/browser) => we must create on client. FE and BE are separate
