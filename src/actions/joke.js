@@ -8,6 +8,9 @@ import axios from 'axios';
 //=> when we receive data from API, middleware will dispatch response to reducer
 
 // HOC # HOF => HOF: take a function as parameter
+
+const getRandomNumber = () => Math.floor(Math.random() * 6)
+
 export const getJokes = () => async dispatch => {
   //action returns a type and data
   //will call action loading here BEFORE CALLING API
@@ -31,7 +34,7 @@ export const getJokes = () => async dispatch => {
     arrJokes.push({
       id,
       joke,
-      score: 0
+      score: getRandomNumber()
       // image: imageResponse.data[0].url
     })
     count++;
@@ -54,12 +57,12 @@ export const addOneJoke = () => async dispatch => {
     }
   }
   )
-  const { id, joke} = response.data;
+  const { id, joke } = response.data;
   dispatch({
     type: 'ADD_ONE_JOKE',
     //return one object, not array of jokes
-    //initialize the value of score 
-    payload: { id, joke, score: 0 }
+    //initialize the value of score
+    payload: { id, joke, score: getRandomNumber() }
   })
 }
 
@@ -76,8 +79,8 @@ export const addJokes = (number) => async dispatch => {
         Accept: 'application/json'
       }
     })
-    const { id, joke} = response.data;
-    jokeArr.push({ id, joke, score: 0 })
+    const { id, joke } = response.data;
+    jokeArr.push({ id, joke, score: getRandomNumber() })
   }
 
   dispatch({

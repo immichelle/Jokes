@@ -47,6 +47,7 @@ class JokeList extends Component {
                         <p>{index + 1}. {item.joke}
                             <button onClick={() => increaseVote(item.id)}>UP</button>
                             <button onClick={() => { }}>DOWN</button>
+                            {/* Add a random score to each joke ranging from 0 to 5 */}
                             <span>SCORE: {item.score}</span>
                         </p>
                         {/* in a real project, the URL might be dynamic (not fixed, it can change) => so you don't wanna hardcode it  */}
