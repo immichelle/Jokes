@@ -29,8 +29,7 @@ export const getJokes = () => async dispatch => {
     })
     const { id, joke } = response.data;
     //after getting id from the first API call, use the ID to make the second API call to get an image
-    const imageResponse = await axios.get(`https://picsum.photos/v2/list`)
-    console.log(imageResponse)
+    // const imageResponse = await axios.get(`https://picsum.photos/v2/list`)
     arrJokes.push({
       id,
       joke,
@@ -105,5 +104,15 @@ export const increaseVote = (id) => async dispatch => {
     //how do we get score? Wil said that sometimes we can get from API, sometimes we don't need to. We just need a state on the front end to manipulate score.
     //sometimes API don't return value of state, for example: score, but our app needs "score" on client(front end/browser) => we must create on client. FE and BE are separate
     //writing an API would take much/a lot of time because time is uncountable
+  })
+}
+
+export const decreaseVote = id => async dispatch => {
+  dispatch({
+    type: 'DECREASE_VOTE',
+    payload: {
+      id,
+      randomNumber: getRandomNumber()
+    }
   })
 }

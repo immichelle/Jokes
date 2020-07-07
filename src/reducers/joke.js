@@ -46,8 +46,14 @@ export default (state = initialState, action) => {
                 }
                 return item
             })
-            console.log(secondState)
-            return secondState
+            return secondState;
+        case 'DECREASE_VOTE':
+            return [...state].map(item => {
+                if(item.id === payload.id) {
+                    item.score = item.score - payload.randomNumber
+                }
+                return item
+            })
         default:
             return state
     }

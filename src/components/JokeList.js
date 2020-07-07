@@ -10,7 +10,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import ClipLoader from "react-spinners/ClipLoader";
 import PacmanLoader from "react-spinners/PacmanLoader";
-
+import SearchForm from './SearchForm';
 //this component needs to access state in reducer in order to be rendered
 //in order to do this, we pass 2 params to connect():
 //1st param: mapStateToProps - get data from state in reducer
@@ -20,7 +20,7 @@ import PacmanLoader from "react-spinners/PacmanLoader";
 // to get action from action folder, we need to import it
 
 // : colon, ; semicolon , comma
-import { getJokes, addOneJoke, addJokes, increaseVote } from '../actions/joke'
+import { getJokes, addOneJoke, addJokes, increaseVote, decreaseVote } from '../actions/joke'
 
 class JokeList extends Component {
     state = {
@@ -40,7 +40,7 @@ class JokeList extends Component {
 
     render() {
         // jokeList and loading are passed down from mapStateToProps
-        let { jokeList, getJokes, addOneJoke, addJokes, loading, increaseVote } = this.props; //
+        let { jokeList, getJokes, addOneJoke, addJokes, loading, increaseVote, decreaseVote } = this.props; //
         jokeList = jokeList.sort((a, b) => b.score - a.score)
         console.log(this.state)
         if(this.state.orderIncrease === true) {
@@ -54,12 +54,16 @@ class JokeList extends Component {
                     //when the joke list is waiting for response from API, loading is true. After that, loading is false
                     loading={loading}
                 />
+
+                {/* Form to input search term */}
+                <SearchForm />
+
                 {jokeList.map((item, index) =>
                     <div style={{ margin: 20 }} key={item.id}>
                         {/* TODO: create 2 buttons: 'up' and 'down' for each joke */}
                         <p>{index + 1}. {item.joke}
                             <button onClick={() => increaseVote(item.id)}>UP</button>
-                            <button onClick={() => { }}>DOWN</button>
+                            <button onClick={() => decreaseVote(item.id)}>DOWN</button>
                             {/* Add a random score to each joke ranging from 0 to 5 */}
                             <span>SCORE: {item.score}</span>
                         </p>
@@ -98,6 +102,6 @@ const mapStateToProps = state => {
     }; //combined reducer = whole state
 }
 
-const mapDispatchToProps = { getJokes, addOneJoke, addJokes, increaseVote }
+const mapDispatchToProps = { getJokes, addOneJoke, addJokes, increaseVote, decreaseVote }
 //this is an example of higher order component HOC
 export default connect(mapStateToProps, mapDispatchToProps)(JokeList)
