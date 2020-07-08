@@ -84,7 +84,7 @@ export const addJokes = (number) => async dispatch => {
 
   dispatch({
     type: 'ADD_JOKES',
-    //return the aray of new jokes
+    //return the array of new jokes
     payload: jokeArr
   });
 
@@ -114,5 +114,21 @@ export const decreaseVote = id => async dispatch => {
       id,
       randomNumber: getRandomNumber()
     }
+  })
+}
+
+export const handleSearch = searchTerm => async dispatch => {
+  const response = await axios.get(`https://icanhazdadjoke.com/search?term=${searchTerm}`, {
+    headers: {
+      Accept: 'application/json'
+    }
+  }
+  )
+  const responses = response.data.results;
+  const searchResults = responses.map(item => ({...item, score: 0}))
+
+  dispatch({
+    type: 'HANDLE_SEARCH',
+    payload: searchResults
   })
 }

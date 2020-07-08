@@ -20,7 +20,7 @@ import SearchForm from './SearchForm';
 // to get action from action folder, we need to import it
 
 // : colon, ; semicolon , comma
-import { getJokes, addOneJoke, addJokes, increaseVote, decreaseVote } from '../actions/joke'
+import { getJokes, addOneJoke, addJokes, increaseVote, decreaseVote, handleSearch } from '../actions/joke'
 
 class JokeList extends Component {
     state = {
@@ -33,19 +33,23 @@ class JokeList extends Component {
 
     handleReverseJokes = () => {
         //toggle order Increase
-        this.setState({orderIncrease: !this.state.orderIncrease})
+        this.setState({ orderIncrease: !this.state.orderIncrease })
     }
 
+    hello = () => {
+        console.log('hello')
+    }
     // render => componentDidMount to get Data => after data is successfully fetched, render will be called again
 
     render() {
         // jokeList and loading are passed down from mapStateToProps
-        let { jokeList, getJokes, addOneJoke, addJokes, loading, increaseVote, decreaseVote } = this.props; //
+        let { jokeList, getJokes, addOneJoke, addJokes, loading, increaseVote, decreaseVote, handleSearch } = this.props; //
         jokeList = jokeList.sort((a, b) => b.score - a.score)
-        console.log(this.state)
-        if(this.state.orderIncrease === true) {
+
+        if (this.state.orderIncrease === true) {
             jokeList = jokeList.sort((a, b) => a.score - b.score)
         }
+
         return ( //why parenthesis? to wrap everything. If it's just one line, you don't need the parenthesis here
             <div>
                 <PacmanLoader
@@ -55,8 +59,8 @@ class JokeList extends Component {
                     loading={loading}
                 />
 
-                {/* Form to input search term */}
-                <SearchForm />
+                {/* Form to input search term. After searching, the search results will replace the current joke list */}
+                <SearchForm onSearch={handleSearch} />
 
                 {jokeList.map((item, index) =>
                     <div style={{ margin: 20 }} key={item.id}>
@@ -84,7 +88,7 @@ class JokeList extends Component {
                     <option value="5">Add 5 jokes</option>
                 </select>
                 {/* TODO: Get a joke and its image */}
-                <button onClick={() => {this.handleReverseJokes()}}>Reverse the order of jokes</button>
+                <button onClick={() => { this.handleReverseJokes() }}>Reverse the order of jokes</button>
             </div>
         )
     }
@@ -102,6 +106,6 @@ const mapStateToProps = state => {
     }; //combined reducer = whole state
 }
 
-const mapDispatchToProps = { getJokes, addOneJoke, addJokes, increaseVote, decreaseVote }
+const mapDispatchToProps = { getJokes, addOneJoke, addJokes, increaseVote, decreaseVote, handleSearch }
 //this is an example of higher order component HOC
 export default connect(mapStateToProps, mapDispatchToProps)(JokeList)
