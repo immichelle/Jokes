@@ -54,17 +54,17 @@ export default (state = initialState, action) => {
 
         case 'DECREASE_VOTE':
             return [...state].map(item => {
-                if(item.id === payload.id) {
+                if (item.id === payload.id) {
                     item.score = item.score - payload.randomNumber
                 }
                 return item
             })
 
         case 'HANDLE_SEARCH':
-            console.log('old state', state)
-            console.log('payload - new state', payload)
+           // console.log('old state', state)
+           // console.log('payload - new state', payload)
             //replace old state with new state
-            return payload
+            return payload.searchResults
 
         default:
             return state

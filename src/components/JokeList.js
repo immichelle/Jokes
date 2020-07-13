@@ -11,6 +11,7 @@ import { connect } from 'react-redux'
 import ClipLoader from "react-spinners/ClipLoader";
 import PacmanLoader from "react-spinners/PacmanLoader";
 import SearchForm from './SearchForm';
+import { Pagination } from 'semantic-ui-react'
 //this component needs to access state in reducer in order to be rendered
 //in order to do this, we pass 2 params to connect():
 //1st param: mapStateToProps - get data from state in reducer
@@ -24,7 +25,9 @@ import { getJokes, addOneJoke, addJokes, increaseVote, decreaseVote, handleSearc
 
 class JokeList extends Component {
     state = {
-        orderIncrease: false
+        orderIncrease: false,
+        activePage: 1,
+        searchTerm: ''
     }
     //to call action when component is initialized, we use "componentDidMount"
     componentDidMount() {
@@ -36,20 +39,31 @@ class JokeList extends Component {
         this.setState({ orderIncrease: !this.state.orderIncrease })
     }
 
-    hello = () => {
-        console.log('hello')
+    handlePageChange = async (event, data) => {
+        console.log('event', event);
+        console.log('data', data.activePage);
+        await this.setState({ activePage: data.activePage })
+        this.props.handleSearch(this.state.searchTerm, data.activePage)
     }
-    // render => componentDidMount to get Data => after data is successfully fetched, render will be called again
 
+    // render runs first (to render DOM) before componentDidMount. componentDidMount is to get Data (for example from API)
+
+    handleOnSearch = (searchTerm) => {
+        this.setState({ searchTerm })
+    }
     render() {
         // jokeList and loading are passed down from mapStateToProps
-        let { jokeList, getJokes, addOneJoke, addJokes, loading, increaseVote, decreaseVote, handleSearch } = this.props; //
+        let { jokeList, getJokes, addOneJoke, addJokes, loading, increaseVote, decreaseVote, handleSearch, jokeNumber } = this.props; //
+        const {activePage} = this.state
+
         jokeList = jokeList.sort((a, b) => b.score - a.score)
 
         if (this.state.orderIncrease === true) {
             jokeList = jokeList.sort((a, b) => a.score - b.score)
         }
 
+        const limit = 5;//max jokes per page
+        const jokeIndex = limit*(activePage-1)+1 //get joke Index for pagination
         return ( //why parenthesis? to wrap everything. If it's just one line, you don't need the parenthesis here
             <div>
                 <PacmanLoader
@@ -60,12 +74,15 @@ class JokeList extends Component {
                 />
 
                 {/* Form to input search term. After searching, the search results will replace the current joke list */}
-                <SearchForm onSearch={handleSearch} />
+                <SearchForm
+                    onSearch={handleSearch}
+
+                    onSearchTerm={this.handleOnSearch} />
 
                 {jokeList.map((item, index) =>
                     <div style={{ margin: 20 }} key={item.id}>
                         {/* TODO: create 2 buttons: 'up' and 'down' for each joke */}
-                        <p>{index + 1}. {item.joke}
+                        <p>{jokeIndex + index}. {item.joke}
                             <button onClick={() => increaseVote(item.id)}>UP</button>
                             <button onClick={() => decreaseVote(item.id)}>DOWN</button>
                             {/* Add a random score to each joke ranging from 0 to 5 */}
@@ -89,6 +106,15 @@ class JokeList extends Component {
                 </select>
                 {/* TODO: Get a joke and its image */}
                 <button onClick={() => { this.handleReverseJokes() }}>Reverse the order of jokes</button>
+                <div>
+                    {/* number of jokes modulous use Math.ceil(n / limit) - n=number of jokes */}
+                    <Pagination
+                        defaultActivePage={1}
+                        totalPages={Math.ceil(jokeNumber / limit)}
+                        onPageChange={this.handlePageChange}
+                        activePage={this.state.activePage}
+                    />
+                </div>
             </div>
         )
     }
@@ -102,7 +128,8 @@ const mapStateToProps = state => {
     //because mapStateToProps must return an object while state.joke is an array, so we create a new object with jokeList as the key and state.joke as the value
     return {
         jokeList: state.joke,
-        loading: state.loading.isLoading
+        loading: state.loading.isLoading,
+        jokeNumber: state.pagination.totalJokes //pagination is the name of the reducer. Format: newVariable: state.reducerName.propertyName
     }; //combined reducer = whole state
 }
 

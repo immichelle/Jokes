@@ -14,12 +14,11 @@ export class SearchForm extends Component {
             console.log('line 14',this.state)
             //all updated state is at here
         }) //after this, we have a new value for this.state.value => at here , the state doesn't immediately update. SetState is an async function
-
-
     }
 
     handleSubmit = e => {//5.
         e.preventDefault();
+        this.props.onSearchTerm(this.state.searchTerm);
         this.props.onSearch(this.state.searchTerm)//send the search Term to SearchForm component in jokelist
     }
 

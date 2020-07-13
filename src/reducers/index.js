@@ -2,6 +2,7 @@
 // export reducers to app so that app can use it
 import jokeReducer from './joke'
 import loadingReducer from './loading'
+import paginationReducer from './pagination'
 import {combineReducers} from 'redux'
 
 // call combinedReducer here because it's a function by design
@@ -10,8 +11,9 @@ import {combineReducers} from 'redux'
 export default combineReducers({
     joke: jokeReducer,
     //loading is just a key, loadingReducer is what was imported
-    loading: loadingReducer
-}) //key JO K
+    loading: loadingReducer,
+    pagination: paginationReducer
+}) 
 //here I'm exporting the result of this function combinedReducer({joke: jokeReducer}) => rootReducer in index.js
 // the combination of all the reducers make the state
 

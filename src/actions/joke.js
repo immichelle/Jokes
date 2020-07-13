@@ -117,18 +117,22 @@ export const decreaseVote = id => async dispatch => {
   })
 }
 
-export const handleSearch = searchTerm => async dispatch => {
-  const response = await axios.get(`https://icanhazdadjoke.com/search?term=${searchTerm}`, {
+export const handleSearch = (searchTerm, activePage) => async dispatch => {
+  const limit = 5;
+  const response = await axios.get(
+    `https://icanhazdadjoke.com/search?term=${searchTerm}&limit=${limit}&page=${activePage}`, {
     headers: {
       Accept: 'application/json'
     }
   }
   )
+  const totalJokes = response.data.total_jokes;
   const responses = response.data.results;
-  const searchResults = responses.map(item => ({...item, score: 0}))
+
+  const searchResults = responses.map(item => ({ ...item, score: 0 }))
 
   dispatch({
     type: 'HANDLE_SEARCH',
-    payload: searchResults
+    payload: { searchResults, totalJokes }
   })
 }
